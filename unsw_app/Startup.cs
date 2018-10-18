@@ -3,8 +3,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using unsw_app.Data;
 using unsw_app.Hubs;
 
 namespace unsw_app
@@ -29,7 +31,9 @@ namespace unsw_app
             }));
             services.AddSignalR();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-
+            services.AddDbContext<ApplicationDbContext>(options =>
+                                                       options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
+                                                       b => b.MigrationsAssembly("unsw_app")));
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {

@@ -13,7 +13,7 @@ export class PatientdataComponent implements OnInit {
 
   ngOnInit() {
     this._hubConnection = new HubConnectionBuilder()
-      .withUrl("https://localhost:44347/notify")
+      .withUrl("http://localhost:53457/notify")
       .build();
     this._hubConnection
       .start()
