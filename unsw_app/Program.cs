@@ -16,29 +16,11 @@ namespace unsw_app
     {
         public static void Main(string[] args)
         {
-            var host = CreateWebHostBuilder(args);
-            using (var scope = host.Services.CreateScope())
-            {
-                var services = scope.ServiceProvider;
-                try
-                {
-                    var serviceProvider = services.GetRequiredService<IServiceProvider>();
-                    var configuration = services.GetRequiredService<IConfiguration>();
-                    Seed.CreateAdminUser(serviceProvider, configuration).Wait();
-
-                }
-                catch (Exception exception)
-                {
-                    var logger = services.GetRequiredService<ILogger<Program>>();
-                    logger.LogError(exception, "An error occurred while creating User");
-                }
-            }
-            host.Run();
+            CreateWebHostBuilder(args).Build().Run();
         }
 
-        public static IWebHost CreateWebHostBuilder(string[] args) =>
+        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>()
-                .Build();
+                .UseStartup<Startup>();
     }
 }

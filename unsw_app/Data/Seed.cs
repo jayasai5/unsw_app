@@ -19,12 +19,7 @@ namespace unsw_app.Data
                 Password = Configuration.GetSection("AppSettings")["UserPassword"],
                 Role = "Admin"
             };
-            var user = db.Users.FirstOrDefault(u => u.Username == Configuration.GetSection("AppSettings")["UserEmail"]);
-            if (user == null)
-            {
-                var addedUser = db.Add<User>(admin);
-                db.SaveChanges();
-            }
+            //var user = db.Users.FirstOrDefault(u => u.Username == Configuration.GetSection("AppSettings")["UserEmail"]);
         }
     }
 }

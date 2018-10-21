@@ -2,11 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using unsw_app.Data;
+using unsw_app.Helpers;
 using unsw_app.Models;
 using unsw_app.Models.Entities;
+using unsw_app.ViewModels;
 
 namespace unsw_app.Controllers
 {
@@ -14,33 +18,37 @@ namespace unsw_app.Controllers
     [ApiController]
     public class AccountsController : ControllerBase
     {
-        ApplicationDbContext _db;
-        public AccountsController(ApplicationDbContext context)
+        private readonly ApplicationDbContext _appDbContext;
+        private readonly UserManager<AppUser> _userManager;
+        private readonly IMapper _mapper;
+
+        public AccountsController(UserManager<AppUser> userManager, IMapper mapper, ApplicationDbContext appDbContext)
         {
-            _db = context;
+            _userManager = userManager;
+            _mapper = mapper;
+            _appDbContext = appDbContext;
         }
-        [HttpPost("createuser")]
-        public async Task<IActionResult> CreateUser([FromBody]CreateUser user)
+
+        // POST api/accounts
+        [HttpPost]
+        public async Task<IActionResult> Post([FromBody]RegistrationViewModel model)
         {
-            var admin = _db.Users.Where(u => u.Username == user.AdminPassword&& u.Password == user.AdminPassword).FirstOrDefault();
-            if (admin == null)
+            if (!ModelState.IsValid)
             {
-                return BadRequest();
-            }
-            else {
-                try
-                {
-                    await _db.AddAsync<User>(new User() { Username = user.Username, Password = user.Password, Role = "Staff" });
-                    await _db.SaveChangesAsync();
-                }
-                catch (Exception e) {
-                    return BadRequest();
-                }
-                
+                return BadRequest(ModelState);
             }
 
+            var userIdentity = _mapper.Map<AppUser>(model);
 
-            return new OkResult();
+            var result = await _userManager.CreateAsync(userIdentity, model.Password);
+
+            if (!result.Succeeded) return new BadRequestObjectResult(Errors.AddErrorsToModelState(result, ModelState));
+
+            await _appDbContext.MedicalUsers.AddAsync(new MedicalUser { IdentityId = userIdentity.Id, Activated = false });
+            await _appDbContext.SaveChangesAsync();
+
+            return new OkObjectResult("Account created");
         }
+
     }
 }
