@@ -11,7 +11,7 @@ The application can be deployed either on windows or linux as aspnetcore support
 * Install dotnet sdk 2.1
 * Install the project dependencies using npm(inside ClientApp) and dotnet commands(inside project directory).
 * Build the application using `dotnet build` inside the project directory.
-* Run it using dotnet run
+* Run it using `dotnet run`
 # Question answers
 1. If I had more time I would focus more on error handling and asthetics of the application.
 2. The authentication and the front-end application development took me the most amount of time because I have learnt angular development before but I did not have any practical experience with it.
