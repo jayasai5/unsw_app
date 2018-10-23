@@ -32,6 +32,25 @@ namespace unsw_app.Data
                     dbContext.SaveChangesAsync().Wait();
                 }
             }
+            if (userManager.FindByEmailAsync("medical@user.com").Result == null)
+            {
+                AppUser user = new AppUser
+                {
+                    FirstName = "medical",
+                    LastName = "user",
+                    UserName = "medical@user.com",
+                    Email = "medical@user.com",
+                    EmailConfirmed = true
+                };
+
+                IdentityResult result = userManager.CreateAsync(user, "user1234").Result;
+
+                if (result.Succeeded)
+                {
+                    dbContext.MedicalUsers.AddAsync(new MedicalUser { IdentityId = user.Id, Activated = true }).Wait();
+                    dbContext.SaveChangesAsync().Wait();
+                }
+            }
         }
     }
 }

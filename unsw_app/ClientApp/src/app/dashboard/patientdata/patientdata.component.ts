@@ -3,6 +3,7 @@ import { HubConnection, HubConnectionBuilder } from '@aspnet/signalr' ;
 import { Patient } from '../models/patient';
 import { DashboardService } from '../dashboard.service';
 import { error } from 'util';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-patientdata',
@@ -13,7 +14,7 @@ export class PatientdataComponent implements OnInit {
   private _hubConnection: HubConnection;
   patients: Patient[];
   occupation: string;
-  constructor(private service: DashboardService) { }
+  constructor(private service: DashboardService, private messageService: MessageService) { }
 
   ngOnInit() {
     this.service.getPatients()
@@ -33,13 +34,14 @@ export class PatientdataComponent implements OnInit {
       .catch(err => console.log('Error while establishing connection :('));
 
     this._hubConnection.on('BroadcastMessage', (patientid: number, occupation: string) => {
-      this.UpdatePatient(patientid, occupation)
+      this.UpdatePatient(patientid, occupation);
     });
   }
   UpdatePatient(patientid,occupation) {
     for (let patient of this.patients) {
       if (patient.patientId == patientid) {
         patient.occupation = occupation;
+        this.messageService.add({ severity: 'success', summary: patient.patientName + 'has moved to the' + patient.occupation });
       }
     }
   }

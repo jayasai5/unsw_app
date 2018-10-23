@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DashboardService } from '../dashboard.service';
 import { Medicaluser } from '../models/medicaluser';
-import { error } from 'protractor';
-import { userInfo } from 'os';
 import { MessageService } from 'primeng/api';
 
 @Component({
