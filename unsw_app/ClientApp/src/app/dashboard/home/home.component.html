@@ -1,3 +1,6 @@
-<p>
-  home works!
+<p *ngIf="admin">
+  You have logged in as an Administrator and you can edit which users can access the patient data.
+</p>
+<p *ngIf="!admin">
+  You have logged in as an Medical Professional and you can view patient data
 </p>

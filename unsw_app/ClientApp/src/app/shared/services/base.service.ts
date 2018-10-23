@@ -15,7 +15,7 @@ export abstract class BaseService {
     }
 
     var modelStateErrors: string = '';
-    var serverError = error.json();
+    var serverError = JSON.parse(JSON.stringify(error));
 
     if (!serverError.type) {
       for (var key in serverError) {

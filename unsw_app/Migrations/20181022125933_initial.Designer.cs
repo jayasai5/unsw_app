@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using unsw_app.Data;
 
 namespace unsw_app.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181022125933_initial")]
+    partial class initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -216,26 +218,36 @@ namespace unsw_app.Migrations
                     b.ToTable("MedicalUsers");
                 });
 
+            modelBuilder.Entity("unsw_app.Models.Entities.Occupation", b =>
+                {
+                    b.Property<int>("OccupationId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("OccupationType");
+
+                    b.Property<DateTime>("OcupationTime");
+
+                    b.Property<int?>("PatientId");
+
+                    b.HasKey("OccupationId");
+
+                    b.HasIndex("PatientId");
+
+                    b.ToTable("Occupations");
+                });
+
             modelBuilder.Entity("unsw_app.Models.Entities.Patient", b =>
                 {
                     b.Property<int>("PatientId")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Occupation");
-
                     b.Property<string>("PatientName");
 
                     b.HasKey("PatientId");
 
                     b.ToTable("Patients");
-
-                    b.HasData(
-                        new { PatientId = 1, Occupation = "kitchen", PatientName = "patient_1" },
-                        new { PatientId = 2, Occupation = "living room", PatientName = "patient_2" },
-                        new { PatientId = 3, Occupation = "bath room", PatientName = "patient_3" },
-                        new { PatientId = 4, Occupation = "kitchen", PatientName = "patient_4" }
-                    );
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -295,6 +307,13 @@ namespace unsw_app.Migrations
                     b.HasOne("unsw_app.Models.Entities.AppUser", "Identity")
                         .WithMany()
                         .HasForeignKey("IdentityId");
+                });
+
+            modelBuilder.Entity("unsw_app.Models.Entities.Occupation", b =>
+                {
+                    b.HasOne("unsw_app.Models.Entities.Patient", "patient")
+                        .WithMany("Occupations")
+                        .HasForeignKey("PatientId");
                 });
 #pragma warning restore 612, 618
         }

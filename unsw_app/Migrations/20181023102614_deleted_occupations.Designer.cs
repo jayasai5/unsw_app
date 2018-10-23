@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using unsw_app.Data;
 
 namespace unsw_app.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181023102614_deleted_occupations")]
+    partial class deleted_occupations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -231,10 +233,7 @@ namespace unsw_app.Migrations
                     b.ToTable("Patients");
 
                     b.HasData(
-                        new { PatientId = 1, Occupation = "kitchen", PatientName = "patient_1" },
-                        new { PatientId = 2, Occupation = "living room", PatientName = "patient_2" },
-                        new { PatientId = 3, Occupation = "bath room", PatientName = "patient_3" },
-                        new { PatientId = 4, Occupation = "kitchen", PatientName = "patient_4" }
+                        new { PatientId = 1, PatientName = "patient_1" }
                     );
                 });
 

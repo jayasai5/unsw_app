@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-
+  admin: boolean = localStorage.getItem('auth_access')=="admin_access";
   constructor() { }
 
   ngOnInit() {

@@ -1,0 +1,18 @@
+<p *ngIf="!patients"><em>Loading...</em></p>
+
+<table class='table' *ngIf="patients">
+  <thead>
+    <tr>
+      <th>Patient Id</th>
+      <th>Name</th>
+      <th>Occupation</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let patient  of patients">
+      <td>{{ patient.patientId }}</td>
+      <td>{{ patient.patientName }}</td>
+      <td>{{ patient.occupation }}</td>
+    </tr>
+  </tbody>
+</table>

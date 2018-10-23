@@ -5,6 +5,12 @@
       <li class="nav-item">
         <a class="nav-link sidebar-menu-button" routerLinkActive="active-sidebar-link" routerLink='/dashboard/home'><i class="fa fa-home" aria-hidden="true"></i> Home</a>
       </li>
+      <li *ngIf="!admin" class="nav-item">
+        <a class="nav-link sidebar-menu-button" routerLinkActive="active-sidebar-link" routerLink='/dashboard/patientdata'><i class="fa fa-home" aria-hidden="true"></i> Patient Data</a>
+      </li>
+      <li *ngIf="admin" class="nav-item">
+        <a class="nav-link sidebar-menu-button" routerLinkActive="active-sidebar-link" routerLink='/dashboard/approveusers'><i class="fa fa-home" aria-hidden="true"></i>Approve Users</a>
+      </li>
     </ul>
   </div>
 

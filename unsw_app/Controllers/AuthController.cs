@@ -57,6 +57,7 @@ namespace unsw_app.Controllers
             var response = new
             {
                 id=identity.Claims.Single(c=>c.Type=="id").Value,
+                access = identity.Claims.Single(c=>c.Type=="rol").Value,
                 auth_token = await _jwtFactory.GenerateEncodedToken(credentials.UserName, identity),
                 expires_in = (int)_jwtOptions.ValidFor.TotalSeconds
             };

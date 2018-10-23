@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { HubConnection, HubConnectionBuilder } from '@aspnet/signalr' ;
+import { Patient } from '../models/patient';
+import { DashboardService } from '../dashboard.service';
+import { error } from 'util';
 
 @Component({
   selector: 'app-patientdata',
@@ -8,12 +11,21 @@ import { HubConnection, HubConnectionBuilder } from '@aspnet/signalr' ;
 })
 export class PatientdataComponent implements OnInit {
   private _hubConnection: HubConnection;
-  occupation: string ;
-  constructor() { }
+  patients: Patient[];
+  occupation: string;
+  constructor(private service: DashboardService) { }
 
   ngOnInit() {
+    this.service.getPatients()
+      .subscribe((patients: Patient[]) => {
+        this.patients = patients;
+        console.log(this.patients)
+      }, error => {
+        console.log(error);
+
+      });
     this._hubConnection = new HubConnectionBuilder()
-      .withUrl("http://localhost:53457/notify")
+      .withUrl("http://localhost:49944/notify")
       .build();
     this._hubConnection
       .start()
@@ -21,8 +33,14 @@ export class PatientdataComponent implements OnInit {
       .catch(err => console.log('Error while establishing connection :('));
 
     this._hubConnection.on('BroadcastMessage', (patientid: number, occupation: string) => {
-      this.occupation = occupation
+      this.UpdatePatient(patientid, occupation)
     });
   }
-
+  UpdatePatient(patientid,occupation) {
+    for (let patient of this.patients) {
+      if (patient.patientId == patientid) {
+        patient.occupation = occupation;
+      }
+    }
+  }
 }
